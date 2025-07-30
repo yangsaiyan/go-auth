@@ -26,7 +26,9 @@ func GenerateJWTCookie(userID uint) (*fiber.Cookie, error) {
 		Expires:  time.Now().Add(72 * time.Hour),
 		HTTPOnly: true,
 		Secure:   false,
-		SameSite: "Strict",
+		SameSite: "Lax",
+		Path:     "/",
+		Domain:   "",
 	}
 
 	return cookie, nil
@@ -39,6 +41,8 @@ func ClearJWTCookie() *fiber.Cookie {
 		Expires:  time.Now().Add(-1 * time.Hour),
 		HTTPOnly: true,
 		Secure:   false,
-		SameSite: "Strict",
+		SameSite: "Lax",
+		Path:     "/",
+		Domain:   "",
 	}
 }

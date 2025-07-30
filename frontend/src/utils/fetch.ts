@@ -16,7 +16,9 @@ export const fetchData = async (url: string) => {
 export const postData = async (url: string, body: any) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.post(url, body);
+      const response = await axios.post(url, body, {
+        withCredentials: true,
+      });
       resolve(response.data);
     } catch (error) {
       reject(error);

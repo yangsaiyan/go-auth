@@ -10,6 +10,7 @@ import (
 func JwtProtected() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		tokenString := c.Cookies("jwt")
+
 		if tokenString == "" {
 			return c.Status(401).JSON(fiber.Map{
 				"error": "Authentication required",

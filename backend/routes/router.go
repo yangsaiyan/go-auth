@@ -12,8 +12,8 @@ func SetupRoutes(app *fiber.App) {
     auth := api.Group("/auth")
     auth.Post("/signup", controllers.Signup)
     auth.Post("/login", controllers.Login)
+    auth.Post("/logout", controllers.Logout)
 
     user := api.Group("/user", middleware.JwtProtected())
-    user.Put("/", controllers.Update)
-    user.Delete("/", controllers.Delete)
+    user.Get("/check", controllers.CheckUser)
 }

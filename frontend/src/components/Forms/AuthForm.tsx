@@ -28,6 +28,7 @@ export default function AuthForm({ authTab }: AuthFormProps) {
           formData
         );
         console.log(response);
+        alert("Login successful");
         navigate("/");
       } catch (error) {
         console.error(error);
@@ -39,6 +40,8 @@ export default function AuthForm({ authTab }: AuthFormProps) {
           formData
         );
         console.log(response);
+        alert("Signup successful");
+        navigate("/");
       } catch (error) {
         console.error(error);
       }

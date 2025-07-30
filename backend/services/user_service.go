@@ -2,18 +2,17 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"go-auth/database"
 	"go-auth/models"
 	"go-auth/utils"
 )
 
 func Login(email string, password string) (models.User, error) {
-	user := models.User{
-		Email:    email,
-		Password: password,
-	}
+	fmt.Println(email, password)
+	var user models.User
 
-	if database.DB.Where("email = ?", email).First(&user).Error == nil {
+	if database.DB.Where("email = ?", email).First(&user).Error != nil {
 		return models.User{}, errors.New("user not found")
 	}
 
@@ -30,16 +29,23 @@ func Login(email string, password string) (models.User, error) {
 }
 
 func Signup(email string, password string) (models.User, error) {
+	var err error
+
 	user := models.User{
 		Email:    email,
 		Password: password,
 	}
 
-	if database.DB.Where("email = ?", email).First(&user).Error == nil {
+	if database.DB.Where("email = ?", email).First(&user).Error != nil {
 		return models.User{}, errors.New("user already exists")
 	}
 
-	_, err := utils.GenerateJWTCookie(user.ID)
+	user.Password, err = utils.HashPassword(password)
+	if err != nil {
+		return models.User{}, errors.New("error hashing password")
+	}
+
+	_, err = utils.GenerateJWTCookie(user.ID)
 	if err != nil {
 		return models.User{}, errors.New("error generating cookie")
 	}
@@ -84,15 +90,23 @@ func Update(email string, password string) (models.User, error) {
 }
 
 func Delete(email string) (models.User, error) {
-	user := models.User{
-		Email: email,
-	}
+	var user models.User
 
-	if database.DB.Where("email = ?", email).First(&user).Error == nil {
+	if database.DB.Where("email = ?", email).First(&user).Error != nil {
 		return models.User{}, errors.New("user not found")
 	}
 
 	database.DB.Delete(&user)
+
+	return user, nil
+}
+
+func GetUserByID(userID uint) (models.User, error) {
+	var user models.User
+
+	if database.DB.Where("id = ?", userID).First(&user).Error != nil {
+		return models.User{}, errors.New("user not found")
+	}
 
 	return user, nil
 }
