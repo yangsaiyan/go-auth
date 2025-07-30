@@ -8,7 +8,7 @@ interface AuthTabProps {
 export default function AuthTab({ value, onChange }: AuthTabProps) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     onChange(newValue);
-    console.log(newValue);
+    console.log(event);
   };
 
   return (
